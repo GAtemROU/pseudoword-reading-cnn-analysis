@@ -48,13 +48,13 @@ The training is done in the `training/training.ipynb`.
 The class responsible for training is `training/trainer_base.py`. It has basic functionality as running epochs or saving models. 
 
 ### Cross Validation
-Due to the relatively small data, the cross validation was implemented for training. 
+Due to relatively small data, a cross validation was implemented for training. 
 `modules/cross_validation.py` is the class responsible for cross validation.
-There are two nested cross validations in the process of training. The outer one is used to test the model, while the inner one is used to evaluate the model.
+There are two nested cross validation loops in the process of training. The outer one is used to test the model, while the inner one is used to validate the model.
 
-Increasing the outer_kfolds parameter in the training will increase the number of models trained, as for each outer fold a model is trained from scratch.
+Increasing the outer_kfolds parameter will increase the number of models trained, as for each outer fold a model is trained from scratch.
 
-Increasing the inner_kfolds parameter in the training will increase the number of epochs a models is trained on, which corresponds to `num_epochs*inner_kfolds`.
+Increasing the inner_kfolds parameter will increase the number of epochs a model is trained on, which corresponds to `num_epochs*inner_kfolds`.
 
 ### Logging
 Logging is done by `modules/logging.py`. During the training process, the logs are saved according to the following illustration:
@@ -70,10 +70,10 @@ experiments/scanpathsb_base_128
 Here, one log corresponds to one full training, while the f1_history file has a history of each individual training, 
 however consecutive trainings, do not overwrite this information. This is useful when experimenting with hyperparameters.
 
-The more general parameters as type of data, model or the in_size are specified in the name of the directory.
+More general parameters such as type of data, model or the in_size are specified in the name of the directory.
 
-The log file looks as follows, after a new fold the participants test participants are saved, they are not seen during the training at all.
-Then we have statistic for each epoch. After the training is done there are statistics on the test data in the end of the fold. 
+The log file looks as follows, after a new fold of test participants is chosen, they are excluded from the training procedure.
+Then we have statistic for each epoch. After the training is done, there are statistics on the test data in the end of the fold. 
 Confusion matrices are calculated separately for each participant, while accuracy and F1 score takes into account samples from all participants in the test set.
 ```
 Fold 1
@@ -96,12 +96,12 @@ Fold 2
 ```
 
 ### Saving Models
-The models are saved under the `saved_models/` followed by the directory that shortly represents a models as well as 
-the time when the training started. As was already discussed above, each for each outer fold a separate model is trained. 
+The models are saved under the `saved_models/` followed by the directory that shortly represents the model as well as 
+the time when the training started. As was already discussed above, a separate model is trained for each outer fold. 
 Hence, a new folder is created for each fold. 
 
 If autosave is True, then the intermediate models are also saved during the training. 
-Those are models that reach new best validation accuracy. In this case the model is named with the corresponding epoch.
+Those are the models that reach new best validation accuracy. In this case, the model is named with the corresponding epoch.
 
 On the other hand, `best_model.pkl` always appears in each fold. And represents the first model with the best validation accuracy.
 
@@ -138,7 +138,7 @@ The convolitions have sizes and strides of 3, 1 and 5, 2 respectively.
 
 
 ## Evaluation
-To evaluate models better, cross validation was implemented. After training, the model is tested on 4 unseen participants. Then, the model is trained from scratch with a different set of test participants. The process is repeated untill each participant have been to the test set ones. 
+To evaluate models better, a cross validation was implemented. After training, the model is tested on 4 unseen participants. Then, the model is trained from scratch with a different set of test participants. The process is repeated until each participant have been to the test set ones. 
 
 ## Performance
 The evaluation mentioned above results in the average f1 score of **0.89**.
